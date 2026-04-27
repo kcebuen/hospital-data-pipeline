@@ -552,6 +552,41 @@ airflow dags trigger hospital_data_pipeline
 
 ---
 
+---
+
+## CI/CD Pipeline
+
+Automated testing with GitHub Actions — runs on every push to `master` or pull request that modifies the `transformation/` directory.
+
+### Workflow: `dbt_ci.yml`
+
+```mermaid
+flowchart LR
+    T1[Push / PR] --> T2[Checkout Code]
+    T2 --> T3[Setup Python 3.12]
+    T3 --> T4[Install dbt-snowflake]
+    T4 --> T5[dbt build]
+    T5 --> T6[dbt test]
+
+    style T1 fill:#333,color:#fff
+    style T2 fill:#6C757D,color:#fff
+    style T3 fill:#3776AB,color:#fff
+    style T4 fill:#FF694B,color:#fff
+    style T5 fill:#FF694B,color:#fff
+    style T6 fill:#2ECC71,color:#fff
+```
+
+| Trigger | Condition | Action |
+|---------|-----------|--------|
+| Push to `master` | Files changed in `transformation/` | Run `dbt build` + `dbt test` |
+| Pull request to `master` | Files changed in `transformation/` | Run `dbt build` + `dbt test` |
+
+**Security:** Snowflake credentials stored as GitHub repository secrets — never exposed in code or logs.
+
+![CI/CD Success](docs/images/ci_cd_success.png)
+
+---
+
 ## What I Learned
 
 ### Data Engineering Concepts
@@ -564,6 +599,7 @@ airflow dags trigger hospital_data_pipeline
 - **dbt** — Source/ref functions, materialization strategies (view vs table), custom macros, data quality testing, lineage tracking
 - **Airflow** — DAG design, operator selection (BashOperator, SQLExecuteQueryOperator), connection and variable management, task dependencies
 - **Power BI** — Snowflake ODBC connection, data modeling with relationships, DAX measures, visual design
+- **Github Actions** - CI/CD workflow configuration, secret management, automated dbt testing on push and pull request triggers
 
 ### Best Practices
 - **Security** — No secrets in code; environment variables, Airflow variables, and AWS credential files
@@ -575,7 +611,7 @@ airflow dags trigger hospital_data_pipeline
 
 ## Future Improvements
 
-- [ ] **CI/CD** — GitHub Actions to run `dbt build` and `dbt test` on every pull request
+- [x] **CI/CD** — GitHub Actions to run `dbt build` and `dbt test` on every pull request
 - [ ] **Incremental models** — Convert mart tables to incremental materialization for larger datasets
 - [ ] **dbt documentation** — Deploy dbt docs as a static site for interactive lineage exploration
 - [ ] **Airflow alerts** — Email or Slack notifications on task failure
