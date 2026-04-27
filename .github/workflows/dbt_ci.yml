@@ -1,0 +1,43 @@
+name: dbt CI
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'transformation/**'
+  pull_request:
+    branches: [master]
+    paths:
+      - 'transformation/**'
+
+jobs:
+  dbt-build-and-test:
+    runs-on: ubuntu-latest
+
+    env:
+      SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+      SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+      SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+      SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dbt
+        run: pip install dbt-snowflake
+
+      - name: Run dbt build
+        working-directory: transformation/hospital_dbt
+        run: dbt build --profiles-dir .
+
+      - name: Run dbt test
+        working-directory: transformation/hospital_dbt
+        run: dbt test --profiles-dir .

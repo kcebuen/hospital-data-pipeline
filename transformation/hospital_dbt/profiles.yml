@@ -3,12 +3,11 @@ hospital_dbt:
   outputs:
     dev:
       type: snowflake
-      account: lqwmfhg-ez05772
-      user: DEV404
-      role: ACCOUNTADMIN
-      database: HOSPITAL_DB
-      warehouse: COMPUTE_WH
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'lqwmfhg-ez05772') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'DEV404') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'ACCOUNTADMIN') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'HOSPITAL_DB') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'COMPUTE_WH') }}"
       schema: RAW
       threads: 4
       password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
-      authenticator: snowflake
