@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: hospital_raw
+    database: HOSPITAL_DB
+    schema: RAW
+    tables:
+      - name: patients
+      - name: doctors
+      - name: appointments
+      - name: billing
+      - name: treatments

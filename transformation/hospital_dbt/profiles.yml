@@ -1,0 +1,14 @@
+hospital_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: lqwmfhg-ez05772
+      user: DEV404
+      role: ACCOUNTADMIN
+      database: HOSPITAL_DB
+      warehouse: COMPUTE_WH
+      schema: RAW
+      threads: 4
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      authenticator: snowflake

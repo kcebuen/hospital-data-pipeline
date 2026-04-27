@@ -1,0 +1,76 @@
+version: 2
+
+models:
+  - name: stg_patients
+    columns:
+      - name: patient_id
+        tests:
+          - not_null
+          - unique
+      - name: gender
+        tests:
+          - accepted_values:
+              values: ['M', 'F']
+      - name: email
+        tests:
+          - not_null
+      - name: insurance_provider
+        tests:
+          - not_null
+
+  - name: stg_doctors
+    columns:
+      - name: doctor_id
+        tests:
+          - not_null
+          - unique
+      - name: specialization
+        tests:
+          - not_null
+
+  - name: stg_appointments
+    columns:
+      - name: appointment_id
+        tests:
+          - not_null
+          - unique
+      - name: status
+        tests:
+          - accepted_values:
+              values:
+                 ["Scheduled", "Completed", "Cancelled", "No-show"]
+      - name: patient_id
+        tests:
+          - relationships:
+              field: patient_id
+              to: ref('stg_patients')
+      - name: doctor_id
+        tests:
+          - relationships:
+              field: doctor_id
+              to: ref('stg_doctors')
+  
+  - name: stg_billing
+    columns:
+      - name: bill_id
+        tests:
+          - not_null
+          - unique
+      - name: amount
+        tests:
+          - not_null
+      - name: payment_status
+        tests:
+          - accepted_values:
+              values:
+                 ["Paid", "Pending", "Failed"]
+  
+  - name: stg_treatments
+    columns:
+      - name: treatment_id
+        tests:
+          - not_null
+          - unique
+      - name: cost
+        tests:
+          - not_null

@@ -1,0 +1,28 @@
+# Secrets
+.env
+~/.aws/
+
+# dbt
+transformation/hospital_dbt/target/
+transformation/hospital_dbt/dbt_packages/
+transformation/hospital_dbt/logs/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+venv/
+*.zip
+
+# Airflow
+airflow.db
+airflow-webserver.pid
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Power BI
+*.pbix.bak
+.user.yml
